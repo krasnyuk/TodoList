@@ -15,9 +15,10 @@ namespace NLT.Controllers
 {
     public class TodoListsController : ApiController
     {
-        private NLTContext db = new NLTContext();
+        NLTContext db = new NLTContext();
         private ITodoListRepository _toDoRepository;
-
+        public TodoListsController()
+        { }
         public TodoListsController(ITodoListRepository rep)
         {
             _toDoRepository = rep;
@@ -26,20 +27,14 @@ namespace NLT.Controllers
         // GET: api/TodoLists
         public IQueryable<TodoList> GetTodoLists()
         {
-            return db.TodoList;
+            return _toDoRepository.GetTodoLists();
         }
 
         // GET: api/TodoLists/5
         [ResponseType(typeof(TodoList))]
         public IHttpActionResult GetTodoList(int id)
         {
-            TodoList todoList = db.TodoList.Find(id);
-            if (todoList == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(todoList);
+            return Ok(_toDoRepository.GetTodoList(id));
         }
 
         // PUT: api/TodoLists/5
@@ -56,11 +51,11 @@ namespace NLT.Controllers
                 return BadRequest();
             }
 
-            db.Entry(todoList).State = EntityState.Modified;
+            _toDoRepository.Update(todoList);
 
             try
             {
-                db.SaveChanges();
+                _toDoRepository.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -85,10 +80,8 @@ namespace NLT.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            db.TodoList.Add(todoList);
-            db.SaveChanges();
-
+            _toDoRepository.Create(todoList);
+            _toDoRepository.Save();
             return CreatedAtRoute("DefaultApi", new { id = todoList.Id }, todoList);
         }
 
@@ -96,30 +89,24 @@ namespace NLT.Controllers
         [ResponseType(typeof(TodoList))]
         public IHttpActionResult DeleteTodoList(int id)
         {
-            TodoList todoList = db.TodoList.Find(id);
-            if (todoList == null)
-            {
-                return NotFound();
-            }
-
-            db.TodoList.Remove(todoList);
-            db.SaveChanges();
-
-            return Ok(todoList);
+            _toDoRepository.Delete(id);
+            _toDoRepository.Save();
+            return Ok();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+                
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
 
         private bool TodoListExists(int id)
         {
-            return db.TodoList.Count(e => e.Id == id) > 0;
+            return _toDoRepository.GetTodoLists().Count(e => e.Id == id) > 0;
         }
     }
 }

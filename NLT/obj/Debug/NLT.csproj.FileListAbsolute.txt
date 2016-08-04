@@ -90,3 +90,10 @@ D:\Универ\dot NET\NLT\NLT\obj\Debug\NLT.pdb
 D:\Универ\dot NET\NLT\NLT\obj\Debug\NLT.csprojResolveAssemblyReference.cache
 D:\Универ\dot NET\NLT\NLT\obj\Debug\NLT.Migrations.Initial.resources
 D:\Универ\dot NET\NLT\NLT\obj\Debug\NLT.csproj.GenerateResource.Cache
+D:\Универ\dot NET\NLT\NLT\bin\Ninject.dll
+D:\Универ\dot NET\NLT\NLT\bin\Ninject.Web.Common.dll
+D:\Универ\dot NET\NLT\NLT\bin\WebActivator.dll
+D:\Универ\dot NET\NLT\NLT\bin\Ninject.pdb
+D:\Универ\dot NET\NLT\NLT\bin\Ninject.xml
+D:\Универ\dot NET\NLT\NLT\bin\Ninject.Web.Common.pdb
+D:\Универ\dot NET\NLT\NLT\bin\Ninject.Web.Common.xml

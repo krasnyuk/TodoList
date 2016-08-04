@@ -8,7 +8,7 @@ namespace NLT.Repository
 {
     public interface ITodoListRepository
     {
-        IEnumerable<TodoList> GetTodoLists();
+        IQueryable<TodoList> GetTodoLists();
         TodoList GetTodoList(int id);
         void Create(TodoList item);
         void Update(TodoList item);

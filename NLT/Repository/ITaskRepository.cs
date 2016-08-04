@@ -9,7 +9,7 @@ namespace NLT.Repository
 {
     public interface ITaskRepository
     {
-        IEnumerable<_Task> GetTaskList();
+        IQueryable<_Task> GetTaskList();
         _Task GetTask(int id);
         void Create(_Task item);
         void Update(_Task item);

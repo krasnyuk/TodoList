@@ -29,12 +29,17 @@ namespace NLT.Repository
 
         public TodoList GetTodoList(int id)
         {
-            return _db.TodoList.Find(id);
+            TodoList entry = _db.TodoList.Find(id);
+            if (entry == null)
+            {
+                throw new NullReferenceException();
+            }
+            return entry;
         }
 
-        public IEnumerable<TodoList> GetTodoLists()
+        public IQueryable<TodoList> GetTodoLists()
         {
-            return _db.TodoList.ToList();
+            return _db.TodoList;
         }
 
         public void Save()

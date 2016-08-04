@@ -31,9 +31,9 @@ namespace NLT.Repository
             return _db._Task.Find(id);
         }
 
-        public IEnumerable<_Task> GetTaskList()
+        public IQueryable<_Task> GetTaskList()
         {
-            return _db._Task.ToList();
+            return _db._Task;
         }
 
         public void Save()
