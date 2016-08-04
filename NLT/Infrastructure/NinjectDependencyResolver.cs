@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using NLT.Repository;
+
 namespace NLT.Infrastructure
 {
     public class NinjectDependencyResolver : IDependencyResolver
@@ -29,7 +31,8 @@ namespace NLT.Infrastructure
 
         private void AddBindings()
         {
-            // Здесь размещаются привязки
+            kernel.Bind<ITodoListRepository>().To<TodoListRepository>();
+            kernel.Bind<ITaskRepository>().To<TaskRepository>();
         }
     }
 }

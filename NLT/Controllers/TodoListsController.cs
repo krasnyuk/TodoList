@@ -9,12 +9,19 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NLT.Models;
+using NLT.Repository;
 
 namespace NLT.Controllers
 {
     public class TodoListsController : ApiController
     {
         private NLTContext db = new NLTContext();
+        private ITodoListRepository _toDoRepository;
+
+        public TodoListsController(ITodoListRepository rep)
+        {
+            _toDoRepository = rep;
+        }
 
         // GET: api/TodoLists
         public IQueryable<TodoList> GetTodoLists()
