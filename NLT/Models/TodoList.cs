@@ -17,5 +17,8 @@ namespace NLT.Models
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime Date { get; set; }
+
+        public ICollection<_Task> _Tasks { get; set; }
+
     }
 }

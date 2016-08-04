@@ -9,30 +9,31 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NLT.Models;
+using NLT.Repository;
 
 namespace NLT.Controllers
 {
     public class _TaskController : ApiController
     {
-        private NLTContext db = new NLTContext();
+
+        private ITaskRepository _taskRepository;
+
+        public _TaskController(ITaskRepository repo)
+        {
+            _taskRepository = repo;
+        }
 
         // GET: api/_Task
         public IQueryable<_Task> Get_Task()
         {
-            return db._Task;
+            return _taskRepository.GetTaskList();
         }
 
         // GET: api/_Task/5
         [ResponseType(typeof(_Task))]
         public IHttpActionResult Get_Task(int id)
         {
-            _Task _Task = db._Task.Find(id);
-            if (_Task == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(_Task);
+            return Ok(_taskRepository.GetTask(id));
         }
 
         // PUT: api/_Task/5
@@ -49,11 +50,11 @@ namespace NLT.Controllers
                 return BadRequest();
             }
 
-            db.Entry(_Task).State = EntityState.Modified;
+            _taskRepository.Update(_Task);
 
             try
             {
-                db.SaveChanges();
+                _taskRepository.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -79,8 +80,8 @@ namespace NLT.Controllers
                 return BadRequest(ModelState);
             }
 
-            db._Task.Add(_Task);
-            db.SaveChanges();
+            _taskRepository.Create(_Task);
+            _taskRepository.Save();
 
             return CreatedAtRoute("DefaultApi", new { id = _Task.Id }, _Task);
         }
@@ -89,30 +90,23 @@ namespace NLT.Controllers
         [ResponseType(typeof(_Task))]
         public IHttpActionResult Delete_Task(int id)
         {
-            _Task _Task = db._Task.Find(id);
-            if (_Task == null)
-            {
-                return NotFound();
-            }
-
-            db._Task.Remove(_Task);
-            db.SaveChanges();
-
-            return Ok(_Task);
+            _taskRepository.Delete(id);
+            _taskRepository.Save();
+            return Ok();
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        db.Dispose();
+        //    }
+        //    base.Dispose(disposing);
+        //}
 
         private bool _TaskExists(int id)
         {
-            return db._Task.Count(e => e.Id == id) > 0;
+            return _taskRepository.GetTaskList().Count(e => e.Id == id) > 0;
         }
     }
 }

@@ -15,10 +15,11 @@ namespace NLT.Controllers
 {
     public class TodoListsController : ApiController
     {
-        NLTContext db = new NLTContext();
+
         private ITodoListRepository _toDoRepository;
         public TodoListsController()
         { }
+
         public TodoListsController(ITodoListRepository rep)
         {
             _toDoRepository = rep;
@@ -68,7 +69,6 @@ namespace NLT.Controllers
                     throw;
                 }
             }
-
             return StatusCode(HttpStatusCode.NoContent);
         }
 

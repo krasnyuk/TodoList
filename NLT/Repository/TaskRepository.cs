@@ -24,11 +24,17 @@ namespace NLT.Repository
             _Task entry = _db._Task.Find(id);
             if (entry != null)
                 _db._Task.Remove(entry);
+            else
+                throw new NullReferenceException();
         }
 
         public _Task GetTask(int id)
         {
-            return _db._Task.Find(id);
+            _Task entry = _db._Task.Find(id);
+            if (entry != null)
+                return entry;
+            else
+                throw new NullReferenceException();
         }
 
         public IQueryable<_Task> GetTaskList()
