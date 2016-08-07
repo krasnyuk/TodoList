@@ -264,6 +264,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\NLTContext.cs" />
+    <Compile Include="Models\ToDoListDetailsDto.cs" />
     <Compile Include="Models\_Task.cs" />
     <Compile Include="Models\TodoList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

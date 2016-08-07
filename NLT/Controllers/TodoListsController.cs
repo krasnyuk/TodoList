@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
@@ -22,9 +23,15 @@ namespace NLT.Controllers
         }
 
         // GET: api/TodoLists
-        public IQueryable<TodoList> GetTodoLists()
+        public IList<ToDoListDetailsDto> GetTodoLists()
         {
-            return _toDoRepository.GetTodoLists();
+            return _toDoRepository.GetTodoLists().Select(t => new ToDoListDetailsDto()
+            {
+                Id = t.Id,
+                Date = t.Date,
+                Title = t.Title,
+                _Tasks = t._Tasks.ToList()
+            }).ToList();
         }
 
         // GET: api/TodoLists/5
