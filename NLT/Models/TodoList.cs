@@ -8,7 +8,6 @@ namespace NLT.Models
 {
     public class TodoList
     {
-        [Required]
         public int Id { get; set; }
 
         [Required]
