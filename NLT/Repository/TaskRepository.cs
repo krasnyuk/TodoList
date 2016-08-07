@@ -8,7 +8,7 @@ namespace NLT.Repository
 {
     public class TaskRepository : ITaskRepository
     {
-        private NLTContext _db;
+        private readonly NLTContext _db;
         public TaskRepository()
         {
             _db = new NLTContext();

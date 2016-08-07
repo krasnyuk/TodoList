@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NLT.Models;
@@ -16,7 +12,7 @@ namespace NLT.Controllers
     public class _TaskController : ApiController
     {
 
-        private ITaskRepository _taskRepository;
+        private readonly ITaskRepository _taskRepository;
 
         public _TaskController(ITaskRepository repo)
         {
@@ -33,7 +29,16 @@ namespace NLT.Controllers
         [ResponseType(typeof(_Task))]
         public IHttpActionResult Get_Task(int id)
         {
-            return Ok(_taskRepository.GetTask(id));
+            _Task result;
+            try
+            {
+                result = _taskRepository.GetTask(id);
+            }
+            catch (NullReferenceException)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         // PUT: api/_Task/5
@@ -90,8 +95,15 @@ namespace NLT.Controllers
         [ResponseType(typeof(_Task))]
         public IHttpActionResult Delete_Task(int id)
         {
-            _taskRepository.Delete(id);
-            _taskRepository.Save();
+            try
+            {
+                _taskRepository.Delete(id);
+                _taskRepository.Save();
+            }
+            catch (NullReferenceException)
+            {
+                return NotFound();
+            }
             return Ok();
         }
 

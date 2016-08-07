@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using NLT.Models;
@@ -16,7 +12,7 @@ namespace NLT.Controllers
     public class TodoListsController : ApiController
     {
 
-        private ITodoListRepository _toDoRepository;
+        private readonly ITodoListRepository _toDoRepository;
         public TodoListsController()
         { }
 
@@ -35,7 +31,16 @@ namespace NLT.Controllers
         [ResponseType(typeof(TodoList))]
         public IHttpActionResult GetTodoList(int id)
         {
-            return Ok(_toDoRepository.GetTodoList(id));
+            TodoList result;
+            try
+            {
+                result = _toDoRepository.GetTodoList(id);
+            }
+            catch (NullReferenceException)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         // PUT: api/TodoLists/5
@@ -64,10 +69,6 @@ namespace NLT.Controllers
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
             }
             return StatusCode(HttpStatusCode.NoContent);
         }
@@ -89,8 +90,16 @@ namespace NLT.Controllers
         [ResponseType(typeof(TodoList))]
         public IHttpActionResult DeleteTodoList(int id)
         {
-            _toDoRepository.Delete(id);
-            _toDoRepository.Save();
+            try
+            {
+                _toDoRepository.Delete(id);
+                _toDoRepository.Save();
+            }
+            catch (NullReferenceException)
+            {
+                return NotFound();
+            }
+            
             return Ok();
         }
 

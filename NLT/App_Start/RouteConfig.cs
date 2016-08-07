@@ -12,7 +12,7 @@ namespace NLT
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-
+            routes.MapRoute("SPA", "Index.html");
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

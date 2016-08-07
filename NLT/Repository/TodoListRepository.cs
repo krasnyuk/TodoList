@@ -9,7 +9,7 @@ namespace NLT.Repository
     public class TodoListRepository : ITodoListRepository
     {
 
-        private NLTContext _db;
+        private readonly NLTContext _db;
         public TodoListRepository()
         {
             _db = new NLTContext();
@@ -25,16 +25,16 @@ namespace NLT.Repository
             TodoList entry = _db.TodoList.Find(id);
             if (entry != null)
                 _db.TodoList.Remove(entry);
+            else
+                throw  new NullReferenceException();
         }
 
         public TodoList GetTodoList(int id)
         {
             TodoList entry = _db.TodoList.Find(id);
-            if (entry == null)
-            {
-                throw new NullReferenceException();
-            }
-            return entry;
+            if (entry != null)
+                return entry;
+            throw new NullReferenceException();
         }
 
         public IQueryable<TodoList> GetTodoLists()

@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+
+    <title> List of tasks </title>
+    <script src="Scripts/jquery-1.10.2.js"></script>
+    <script src="Scripts/bootstrap.min.js"></script>
+    <link href="Content/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body>
+<!--<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+</div>-->
+<div class="container body-content">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="text-center">All task lists</h4>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group" id="Todos"></ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+   
+
+    <div class="col-md-6 col-md-offset-3">
+        <h4>Search by ID</h4>
+
+        <div class="input-group">
+            <input type="text" id="todoId" class="form-control">
+            <span class="input-group-btn">
+                <button onclick="find();" class="btn btn-primary" type="button">Search</button>
+            </span>
+        </div>
+
+        <hr/>
+        <p id="todoItem"/>
+    </div>
+</div>
+
+<script>
+    var uri = 'api/TodoLists';
+
+    $(document).ready(function () {
+      // Send an AJAX request
+      $.getJSON(uri)
+          .done(function (data) {
+            // On success, 'data' contains a list of toDoLists.
+            $.each(data, function (key, item) {
+              // Add a list item for the ToDoList.
+                $('<li>', { text: formatItem(item) }).appendTo($('#Todos')).addClass('list-group-item');
+            });
+          });
+    });
+
+    function formatItem(item) {
+      return '# ' + item.Id + ' ' + item.Title + ' Created: ' + item.Date;
+    }
+
+    function find() {
+      var id = $('#todoId').val();
+      $.getJSON(uri + '/' + id)
+          .done(function (data) {
+            $('#todoItem').text(formatItem(data));
+          })
+          .fail(function (jqXhr, textStatus, err) {
+            $('#todoItem').text('Error: ' + err);
+          });
+    }
+</script>    
+
+</body>
+</html>
