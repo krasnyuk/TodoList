@@ -8,7 +8,10 @@ $(document).ready(function () {
             // On success, 'data' contains a list of toDoLists.
             $.each(data, function (key, item) {
                 // Add a list item for the ToDoList.
-                $('<li>', { text: formatItem(item) }).appendTo($("#Todos")).addClass("list-group-item");
+                $('<li>', { text: formatItem(item) })
+                    .append('<button id=\"Id' + item.Id + '\" onclick="DeleteTodoList(this.id)" class="btn btn-xs btn-warning pull-right"><span class="glyphicon glyphicon-trash"></span></button>')
+                    .appendTo($("#Todos"))
+                    .addClass("list-group-item");
             });
         });
 
@@ -22,7 +25,8 @@ $(document).ready(function () {
             url: getToDoListUri,
             type: 'POST',
             dataType: 'json',
-            data: toDoList,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(toDoList),
             success: function (data, textStatus, xhr) {
                 console.log(data);
             },
@@ -32,6 +36,23 @@ $(document).ready(function () {
         });
         });
 });
+
+function DeleteTodoList(listId) {
+    var resultId = +listId.substring(2);
+    $.ajax({
+        url: getToDoListUri + '/' + resultId,
+        type: 'DELETE',
+        dataType: 'json',
+        //data: person,
+        success: function (data, textStatus, xhr) {
+            location.reload();
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            location.reload();
+        }
+    });
+
+}
 
 function formatItem(item) {
     return '# ' + item.Id + ' ' + item.Title + ' Created: ' + item.Date;
