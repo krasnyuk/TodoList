@@ -14,40 +14,34 @@ namespace NLT.Controllers
     {
 
         private readonly ITodoListRepository _toDoRepository;
-        public TodoListsController()
-        { }
+        private readonly ITaskRepository _taskRepository;
 
-        public TodoListsController(ITodoListRepository rep)
+        public TodoListsController(ITodoListRepository rep, ITaskRepository taskRepository)
         {
             _toDoRepository = rep;
+            _taskRepository = taskRepository;
         }
 
         // GET: api/TodoLists
-        public IList<ToDoListDetailsDto> GetTodoLists()
+        public IList<TodoList> GetTodoLists()
         {
-            return _toDoRepository.GetTodoLists().Select(t => new ToDoListDetailsDto()
-            {
-                Id = t.Id,
-                Date = t.Date,
-                Title = t.Title,
-                _Tasks = t._Tasks.ToList()
-            }).ToList();
+            return _toDoRepository.GetTodoLists().ToList();
         }
 
         // GET: api/TodoLists/5
-        [ResponseType(typeof(TodoList))]
+        [ResponseType(typeof(ToDoListDetailsDto))]
         public IHttpActionResult GetTodoList(int id)
         {
-            TodoList result;
+            TodoList todoList;
             try
             {
-                result = _toDoRepository.GetTodoList(id);
+                todoList = _toDoRepository.GetTodoList(id);
             }
             catch (NullReferenceException)
             {
                 return NotFound();
             }
-            return Ok(result);
+            return Ok(todoList);
         }
 
         // PUT: api/TodoLists/5
@@ -100,6 +94,7 @@ namespace NLT.Controllers
             try
             {
                 _toDoRepository.Delete(id);
+                _taskRepository.DeleteTasksForList(id);
                 _toDoRepository.Save();
             }
             catch (NullReferenceException)

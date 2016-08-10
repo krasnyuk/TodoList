@@ -10,7 +10,7 @@
     <script defer src="Scripts/jquery-1.10.2.js"></script>
     <script defer src="Scripts/bootstrap.min.js"></script>
     <script defer src="Scripts/app/TodoLists.js"></script>
-
+    <script defer src="Scripts/app/Tasks.js"></script>
     <link href="Content/bootstrap.min.css" rel="stylesheet"/>
     
 </head>
@@ -18,101 +18,235 @@
 <body>
 
 <div class="container body-content">
-    <div class="row">
-        <div class="col-md-6">
-            <!-- Panel with To do lists -->
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h4 class="text-center">All task lists</h4>
-                </div>
-                <div class="panel-body">
-                    <ul class="list-group" id="Todos"></ul>
-                </div>
+<!-- POP-UP'S -->
+<!-- Pop-up CREATE NEW LIST -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add new list</h4>
             </div>
 
-        </div>
-        <!-- Panel with form for new lists -->
-        <div class="col-md-4">
-            <div class="panel panel-primary">
-                
-                <div class="panel-heading">
-                    <h4 class="text-center">Create new list</h4>
-                </div>
-
-                <div class="panel-body">
-                    <!-- form with Title and date -->
-                    <div class="form-horizontal" >
-                        <div class="form-group">
-                            <label class="control-label col-sm-2">Title</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="toDoTitle" placeholder="Enter title">
-                            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="toDoTitle" placeholder="Enter title">
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2">Date</label>
-                            <div class="col-sm-10">
-                                <input type="date" id="toDoDate" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-6">
-                                <button type="button" id="toDoCreate" class="btn btn-default">Create</button>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" id="toDoDate" class="form-control">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h4 class="text-center">Update list # <b id="updateListId"></b> </h4>
-                </div>
-
-                <div class="panel-body">
-                    <!-- form with Title and date -->
-                    <div class="form-horizontal" >
-                        <div class="form-group">
-                            <label class="control-label col-sm-2">Title</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="toDoTitleUpdate" placeholder="Enter title">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2">Date</label>
-                            <div class="col-sm-10">
-                                <input type="date" id="toDoDateUpdate" class="form-control">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-6">
-                                <button type="button" id="toDoUpdate" onclick="sendAjaxUpdate()" class="btn btn-default">Update</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="toDoCreate" class="btn btn-primary">Create</button>
             </div>
-        </div>
-    </div>
-    <!-- searching panel -->
-    <div class="row">
-        <div class="col-md-6">
-            <h4>Search by ID</h4>
-
-            <div class="input-group">
-                <input type="text" id="todoId" class="form-control">
-                <span class="input-group-btn">
-                    <button onclick="find();" class="btn btn-primary" type="button">Search</button>
-                </span>
-            </div>
-            <!-- Results of search -->
-            <hr />
-            <p id="todoItem" />
         </div>
     </div>
 </div>
 
+<!-- Pop-up CREATE NEW TASK FOR LIST -->
+<div id="taskModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
 
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add new task</h4>
+            </div>
 
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="taskTitleCreate" placeholder="Enter title">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Description</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="taskDescCreate" placeholder="Enter description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Expire Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" id="taskExpireDateCreate" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox col-sm-10">
+                            <label class="control-label col-sm-2"><input type="checkbox" id="taskCompletedCreate" value="">Completed</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="taskCreate" class="btn btn-primary">Create</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <!-- Panel with To do lists -->
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">
+                <h4 class="text-center">All task lists</h4>
+            </div>
+
+            <div class="panel-body">
+                <ul class="list-group" id="Todos"></ul>
+            </div>
+
+            <div class="panel-footer">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+                    <span class="glyphicon glyphicon-plus"></span> Add list
+                </button>
+            </div>
+
+        </div>
+        <!-- Panel with update for list -->
+        <div class="panel panel-success">
+
+            <div class="panel-heading">
+                <h4 class="text-center">Update list # <b id="updateListId"></b> </h4>
+            </div>
+
+            <div class="panel-body">
+                <!-- form with Title and date -->
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="toDoTitleUpdate" placeholder="Enter title">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" id="toDoDateUpdate" class="form-control">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <button type="button" id="toDoUpdate" onclick="sendAjaxUpdate()" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="col-md-6">
+        <!-- Panel with list of tasks -->
+        <div class="panel panel-primary">
+            
+            <div class="panel-heading">
+                <h4 class="text-center">Task of list # <b id="taskOflist"> </b> </h4>
+            </div>
+
+            <div id="tableBlock" class="panel-body">
+                <!-- form with Title and date -->
+                <h4 class="text-center">Task list details </h4>
+            </div>
+
+            <div class="panel-footer">
+                <button type="button" data-toggle="modal" data-target="#taskModal" class="btn btn-info">
+                    <span class="glyphicon glyphicon-plus"></span> Add task
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Task update PANEL -->
+        <div class="panel panel-success">
+
+            <div class="panel-heading">
+                <h4 class="text-center">Update task # <b id="updateTaskId"></b> </h4>
+            </div>
+
+            <div class="panel-body">
+                <div class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="taskTitleUpdate" placeholder="Enter title">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Description</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="taskDescUpdate" placeholder="Enter description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Expire Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" id="taskExpireDateUpdate" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox col-sm-10">
+                            <label class="control-label col-sm-2"><input type="checkbox" id="taskCompletedUpdate" value="">Completed</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel-footer">
+                <button type="button" id="taskUpdate" onclick="sendAjaxUpdateTask()" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- searching panel -->
+<div class="row">
+    <div class="col-md-6">
+        <h4>Search by ID</h4>
+
+        <div class="input-group">
+            <input type="text" id="todoId" class="form-control">
+            <span class="input-group-btn">
+                    <button onclick="find();" class="btn btn-primary" type="button">Search</button>
+                </span>
+        </div>
+        <!-- Results of search -->
+        <hr/>
+        <p id="todoItem"/>
+    </div>
+</div>
+</div>
 
 </body>
 </html>

@@ -14,6 +14,11 @@ namespace NLT.Repository
         void Create(_Task item);
         void Update(_Task item);
         void Delete(int id);
+        void DeleteTasksForList(int id);
         void Save();
+        IQueryable<_Task> GetTasksForList(int todoListId);
+
+
+
     }
 }

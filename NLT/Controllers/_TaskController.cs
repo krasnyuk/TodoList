@@ -25,6 +25,12 @@ namespace NLT.Controllers
             return _taskRepository.GetTaskList();
         }
 
+        //[HttpGet]
+        //public IQueryable<_Task> TasksForList(int id)
+        //{
+        //    return _taskRepository.GetTasksForList(id);
+        //}
+
         // GET: api/_Task/5
         [ResponseType(typeof(_Task))]
         public IHttpActionResult Get_Task(int id)

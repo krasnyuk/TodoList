@@ -1,24 +1,25 @@
 ﻿
 var getToDoListUri = "api/TodoLists";
 
-$(document).ready(function () {
+function getAllTodoLists() {
     // Send an AJAX request
-    $.getJSON(getToDoListUri)
-        .done(function (data) {
+    $('#Todos').empty();
+    $.getJSON(getToDoListUri,
+        function (data) {
             // On success, 'data' contains a list of toDoLists.
             $.each(data, function (key, item) {
                 // Add a list item for the ToDoList.
                 $('<li>', { text: formatItem(item) })
-                    
                     .append('<button id=\"Id' + item.Id + '\" onclick="DeleteTodoList(this.id)" class="btn btn-xs btn-danger pull-right"><span class="glyphicon glyphicon-trash"></span></button>')
                     .append('<button id=\"Id' + item.Id + '\" onclick="UpdateTodoList(this.id)" class="btn btn-xs btn-warning pull-right"><span class="glyphicon glyphicon-edit"></span></button>')
+                    .append('<button id=\"Id' + item.Id + '\" onclick="DetailsTodoList(this.id)" class="btn btn-xs btn-success pull-right"><span class="glyphicon glyphicon-list"></span></button>')
                     .appendTo($("#Todos"))
                     .addClass("list-group-item");
             });
-        })
-    .fail(function (jqXHR, status, error) {
-        console.log(status, error);
-    });
+        });
+}
+$(document).ready(function () {
+    getAllTodoLists();
 
     //Creating new To-Do list
     $('#toDoCreate').click(function() { //on button click
@@ -33,7 +34,7 @@ $(document).ready(function () {
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(toDoList),
             success: function (data, textStatus, xhr) {
-                location.reload();
+                getAllTodoLists();
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert('error!');
@@ -42,9 +43,10 @@ $(document).ready(function () {
         });
 });
 
+//UPDATE REQUEST FOR TO-DO LIST
 function sendAjaxUpdate() {
     var list = {
-        Id: $('#updateListId').text(),
+            Id: $('#updateListId').text(),
             Title: $('#toDoTitleUpdate').val(),
             Date: $('#toDoDateUpdate').val()
         };
@@ -54,12 +56,13 @@ function sendAjaxUpdate() {
         dataType: 'json',
         data: list,
         success: function (data, textStatus, xhr) {
-            location.reload();
+            getAllTodoLists();
         }
     });
 }
+
+//LOADING DATA INTO PANEL BEFORE UPDATE REQUEST
 function UpdateTodoList(listId) {
-    var list = new Object();
     $.ajax(
         {
             url: getToDoListUri + '/' + listId.substring(2),
@@ -72,26 +75,24 @@ function UpdateTodoList(listId) {
         }
         );
 }
-
+//DELETE REQUEST FOR TO-DO LIST (ALL RELATED TASKS WOULD BE DELETED AT BACK-END BY TO-DO LIST ID)
 function DeleteTodoList(listId) {
     var resultId = +listId.substring(2);
     $.ajax({
         url: getToDoListUri + '/' + resultId,
         type: 'DELETE',
-        //dataType: 'json',
-        //data: person,
         success: function (data, textStatus, xhr) {
-            location.reload();
+            getAllTodoLists();
         },
         error: function (xhr, textStatus, errorThrown) {
-            location.reload();
+            getAllTodoLists();
         }
     });
 
 }
 
 function formatItem(item) {
-    return '# ' + item.Id + ' ' + item.Title + ' Created: ' + item.Date;
+    return '# ' + item.Id + ' | ' + item.Title + ' | Created: ' + item.Date.substring(0,10);
 }
 
 function find() {

@@ -28,6 +28,11 @@ namespace NLT.Repository
                 throw new NullReferenceException();
         }
 
+        public void DeleteTasksForList(int id)
+        {
+            _db._Task.ToList().RemoveAll(x => x.TodoListId == id);
+        }
+
         public _Task GetTask(int id)
         {
             _Task entry = _db._Task.Find(id);
@@ -46,6 +51,12 @@ namespace NLT.Repository
         {
             _db.SaveChanges();
         }
+
+        public IQueryable<_Task> GetTasksForList(int todoListId)
+        {
+            return _db._Task.Where(x => x.TodoListId == todoListId);
+        }
+
 
         public void Update(_Task item)
         {
