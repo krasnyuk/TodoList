@@ -60,7 +60,7 @@ function EditItem(el) {
         $('#updateTaskId').text(data.Id);
         $('#taskTitleUpdate').val(data.Title);
         $('#taskDescUpdate').val(data.Description);
-        $('#taskExpireDateUpdate').val(data.ExpireDate);
+        $('#taskExpireDateUpdate').val(data.ExpireDate.substring(0,10));
         $('#taskCompletedUpdate').val(data.Completed);
     });
 };

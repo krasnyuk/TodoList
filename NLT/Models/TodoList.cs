@@ -15,6 +15,7 @@ namespace NLT.Models
 
         [Required]
         [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
         public ICollection<_Task> _Tasks { get; set; }

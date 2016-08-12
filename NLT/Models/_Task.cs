@@ -18,6 +18,7 @@ namespace NLT.Models
         public string Description { get; set; }
 
         [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? ExpireDate { get; set; }
 
         public bool Completed { get; set; }

@@ -19,7 +19,17 @@ function getAllTodoLists() {
         });
 }
 $(document).ready(function () {
+    //load initial list of to-do lists
     getAllTodoLists();
+
+    //set time-picker's
+    $(function () {
+        $("#taskExpireDateUpdate").addClass('form-control').datepicker({ dateFormat: "yy-mm-dd" });
+        $('#toDoDateUpdate').addClass('form-control').datepicker({ dateFormat: "yy-mm-dd" });
+        $('#toDoDate').addClass('form-control').datepicker({ dateFormat: "yy-mm-dd" });
+        $('#taskExpireDateCreate').addClass('form-control').datepicker({ dateFormat: "yy-mm-dd" });
+       
+    });
 
     //Creating new To-Do list
     $('#toDoCreate').click(function() { //on button click
@@ -69,7 +79,7 @@ function UpdateTodoList(listId) {
             type: 'GET',
             success: function(data, textStatus, xhr) {
                 $('#toDoTitleUpdate').val(data.Title);
-                $('#toDoDateUpdate').val(data.Date);
+                $('#toDoDateUpdate').val(data.Date.substring(0,10));
                 $('#updateListId').text(data.Id);
             }
         }
